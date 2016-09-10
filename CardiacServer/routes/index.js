@@ -8,7 +8,7 @@ var data = JSON.stringify({
  api_key: '4c5cc473',
  api_secret: '701785bd2c966392',
  to: '14406688277',
- from: '15613793611',
+ from: '12404287093',
  text: 'Hello from Alid'
 });
 
