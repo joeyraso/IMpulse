@@ -40,7 +40,6 @@ router.get('/message', function(req, res, next) {
 		});		
 
 		nexmoRes.on('end', function() {
-			console.log(responseData);
 			var decodedResponse = JSON.parse(responseData);
 
 			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
