@@ -5,24 +5,28 @@ var User = require('../models/User');
 /*
 create a request and send a text message
 */
-var data = JSON.stringify({
- api_key: '4c5cc473',
- api_secret: '701785bd2c966392',
- to: '14406688277',
- from: '12404287093',
- text: 'Hello from Alid'
-});
+function createData(to, from, text) {
+	return JSON.stringify({
+		api_key: '4c5cc473',
+ 		api_secret: '701785bd2c966392',
+ 		to: to,
+ 		from: from,
+ 		text: text
+	});
+}
 
-var options = {
- host: 'rest.nexmo.com',
- path: '/sms/json',
- port: 443,
- method: 'POST',
- headers: {
-   'Content-Type': 'application/json',
-   'Content-Length': Buffer.byteLength(data)
- }
-};
+function createOptions(path, host, data) {
+	return {
+		host: host,
+		path: path,
+		port: 443,
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Content-Length': Buffer.byteLength(data)
+		}
+	}
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -30,6 +34,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/message', function(req, res, next) {
+	var data = createData('14406688277', '12404287093', 'Hello from Alid');
+	var options = createOptions('/sms/json', 'rest.nexmo.com', data);
+
 	var nexmoReq = https.request(options);
 	nexmoReq.write(data);
 	nexmoReq.end();
@@ -46,10 +53,10 @@ router.get('/message', function(req, res, next) {
 			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
 			decodedResponse['messages'].forEach(function(message) {
 	    		if (message['status'] === "0") {
-	      			console.log('Success ' + message['message-id']);
+	      			res.send('Success ' + message['message-id']);
 	    		}
 	    		else {
-	      			console.log('Error ' + message['status']  + ' ' +  message['error-text']);
+	      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
 	    		}
 			});
 		});
@@ -57,7 +64,34 @@ router.get('/message', function(req, res, next) {
 });
 
 router.get('/call', function(req, res, next) {
+	var data = createData('14406688277', '12404287093', 'This is an emergency, I am dying');
+	var options = createOptions('/tts/json', 'api.nexmo.com', data);
 
+	var nexmoReq = https.request(options);
+	nexmoReq.write(data);
+	nexmoReq.end();
+
+	var responseData = '';
+	nexmoReq.on('response', function(nexmoRes) {
+		nexmoRes.on('data', function(chunk) {
+			responseData += chunk;
+		});
+
+		nexmoRes.on('end', function() {
+			console.log(responseData);
+			var decodedResponse = JSON.parse(responseData);
+
+			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
+			decodedResponse['messages'].forEach(function(message) {
+	    		if (message['status'] === "0") {
+	      			res.send('Success ' + message['message-id']);
+	    		}
+	    		else {
+	      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
+	    		}
+			});
+		});
+	});
 });
 
 router.get('/addUser', function(req, res, next) {
