@@ -13,16 +13,20 @@ var data = JSON.stringify({
  text: 'Hello from Alid'
 });
 
-var options = {
- host: 'rest.nexmo.com',
- path: '/sms/json',
- port: 443,
- method: 'POST',
- headers: {
-   'Content-Type': 'application/json',
-   'Content-Length': Buffer.byteLength(data)
- }
-};
+
+function reqOptions(path) {
+  return {
+    host: 'rest.nexmo.com',
+    path: path,
+    port: 443,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(data)
+    }
+  };
+}
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -30,7 +34,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/message', function(req, res, next) {
-	var nexmoReq = https.request(options);
+  var nexmoReq = https.request(reqOptions('/sms/json'));
 	nexmoReq.write(data);
 	nexmoReq.end();
 
@@ -57,7 +61,9 @@ router.get('/message', function(req, res, next) {
 });
 
 router.get('/call', function(req, res, next) {
-
+  var nexmoReq = https.request(reqOptions('/call/json'));
+  nexmoReq.write(data);
+  nexmoReq.end();
 });
 
 router.get('/addUser', function(req, res, next) {
