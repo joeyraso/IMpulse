@@ -45,10 +45,10 @@ router.get('/message', function(req, res, next) {
 			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
 			decodedResponse['messages'].forEach(function(message) {
 	    		if (message['status'] === "0") {
-	      			console.log('Success ' + decodedResponse['message-id']);
+	      			console.log('Success ' + message['message-id']);
 	    		}
 	    		else {
-	      			console.log('Error ' + decodedResponse['status']  + ' ' +  decodedResponse['error-text']);
+	      			console.log('Error ' + message['status']  + ' ' +  message['error-text']);
 	    		}
 			});
 		});
