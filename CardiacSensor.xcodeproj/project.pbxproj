@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F7BEF0641D8394640098174B /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7BEF0631D8394640098174B /* HealthKit.framework */; };
+		F7BEF0661D8394ED0098174B /* HealthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BEF0651D8394ED0098174B /* HealthManager.swift */; };
 		F7FD95571D83905100F4FB19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD95561D83905100F4FB19 /* AppDelegate.swift */; };
 		F7FD95591D83905100F4FB19 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FD95581D83905100F4FB19 /* ViewController.swift */; };
 		F7FD955C1D83905100F4FB19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7FD955A1D83905100F4FB19 /* Main.storyboard */; };
@@ -81,6 +83,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F7BEF0621D8394640098174B /* CardiacSensor WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "CardiacSensor WatchKit Extension.entitlements"; sourceTree = "<group>"; };
+		F7BEF0631D8394640098174B /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS2.2.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		F7BEF0651D8394ED0098174B /* HealthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthManager.swift; sourceTree = "<group>"; };
 		F7FD95531D83905100F4FB19 /* CardiacSensor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardiacSensor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7FD95561D83905100F4FB19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7FD95581D83905100F4FB19 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7BEF0641D8394640098174B /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +148,8 @@
 		F7FD954A1D83905100F4FB19 = {
 			isa = PBXGroup;
 			children = (
+				F7BEF0651D8394ED0098174B /* HealthManager.swift */,
+				F7BEF0631D8394640098174B /* HealthKit.framework */,
 				F7FD95551D83905100F4FB19 /* CardiacSensor */,
 				F7FD956A1D83905100F4FB19 /* CardiacSensorTests */,
 				F7FD95751D83905200F4FB19 /* CardiacSensorUITests */,
@@ -207,6 +215,7 @@
 		F7FD958E1D83905200F4FB19 /* CardiacSensor WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				F7BEF0621D8394640098174B /* CardiacSensor WatchKit Extension.entitlements */,
 				F7FD95911D83905200F4FB19 /* InterfaceController.swift */,
 				F7FD95931D83905200F4FB19 /* ExtensionDelegate.swift */,
 				F7FD95951D83905200F4FB19 /* NotificationController.swift */,
@@ -343,6 +352,12 @@
 					};
 					F7FD95891D83905200F4FB19 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 3Z7QMCG556;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -418,6 +433,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7FD95591D83905100F4FB19 /* ViewController.swift in Sources */,
+				F7BEF0661D8394ED0098174B /* HealthManager.swift in Sources */,
 				F7FD95571D83905100F4FB19 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -589,6 +605,7 @@
 		F7FD959D1D83905200F4FB19 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "CardiacSensor WatchKit Extension/CardiacSensor WatchKit Extension.entitlements";
 				INFOPLIST_FILE = "CardiacSensor WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArrestedDev.CardiacSensor.watchkitapp.watchkitextension;
@@ -603,6 +620,7 @@
 		F7FD959E1D83905200F4FB19 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "CardiacSensor WatchKit Extension/CardiacSensor WatchKit Extension.entitlements";
 				INFOPLIST_FILE = "CardiacSensor WatchKit Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ArrestedDev.CardiacSensor.watchkitapp.watchkitextension;
@@ -733,6 +751,7 @@
 				F7FD959E1D83905200F4FB19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F7FD95A01D83905200F4FB19 /* Build configuration list for PBXNativeTarget "CardiacSensor WatchKit App" */ = {
 			isa = XCConfigurationList;
@@ -741,6 +760,7 @@
 				F7FD95A21D83905200F4FB19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F7FD95A41D83905200F4FB19 /* Build configuration list for PBXNativeTarget "CardiacSensor" */ = {
 			isa = XCConfigurationList;
@@ -749,6 +769,7 @@
 				F7FD95A61D83905200F4FB19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F7FD95A71D83905200F4FB19 /* Build configuration list for PBXNativeTarget "CardiacSensorTests" */ = {
 			isa = XCConfigurationList;
@@ -757,6 +778,7 @@
 				F7FD95A91D83905200F4FB19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F7FD95AA1D83905200F4FB19 /* Build configuration list for PBXNativeTarget "CardiacSensorUITests" */ = {
 			isa = XCConfigurationList;
@@ -765,6 +787,7 @@
 				F7FD95AC1D83905200F4FB19 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
