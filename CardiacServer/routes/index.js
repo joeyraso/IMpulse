@@ -16,7 +16,7 @@ var data = JSON.stringify({
  to: '4406688277',
  from: '5613793611',
  text: 'Hello from Alid'
-});g
+});
 
 var options = {
  host: 'rest.nexmo.com',
