@@ -56,6 +56,10 @@ router.get('/message', function(req, res, next) {
 	});
 });
 
+router.get('/call', function(req, res, next) {
+
+});
+
 router.get('/addUser', function(req, res, next) {
 	var user = new User();
 	user.save(function(err, writeResult) {
