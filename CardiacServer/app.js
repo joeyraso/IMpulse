@@ -4,11 +4,26 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var mongoose = require('mongoose');
+var MongoStore = require('connect-mongo')(session);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var MONGODB_URI;
+if (app.get('env') === 'development') {
+  MONGODB_URI = "mongodb://localhost:27017/local";
+} else {
+  MONGODB_URI = process.env.MONGODB_URI
+}
+
+mongoose.connect(MONGODB_URI);
+mongoose.connection.on('error', function(e) {
+  console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
