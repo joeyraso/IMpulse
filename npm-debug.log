@@ -1,21 +1,19 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/Users/joeraso/.nvm/versions/node/v4.4.5/bin/node',
-1 verbose cli   '/Users/joeraso/.nvm/versions/node/v4.4.5/bin/npm',
-1 verbose cli   'start' ]
-2 info using npm@2.15.5
-3 info using node@v4.4.5
-4 verbose stack Error: ENOENT: no such file or directory, open '/Users/joeraso/Desktop/CardiacSensor/package.json'
-4 verbose stack     at Error (native)
-5 verbose cwd /Users/joeraso/Desktop/CardiacSensor
-6 error Darwin 15.5.0
-7 error argv "/Users/joeraso/.nvm/versions/node/v4.4.5/bin/node" "/Users/joeraso/.nvm/versions/node/v4.4.5/bin/npm" "start"
-8 error node v4.4.5
-9 error npm  v2.15.5
-10 error path /Users/joeraso/Desktop/CardiacSensor/package.json
-11 error code ENOENT
-12 error errno -2
-13 error syscall open
-14 error enoent ENOENT: no such file or directory, open '/Users/joeraso/Desktop/CardiacSensor/package.json'
-14 error enoent This is most likely not a problem with npm itself
-14 error enoent and is related to npm not being able to find a file.
-15 verbose exit [ -2, true ]
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
+2 info using npm@3.10.7
+3 info using node@v6.4.0
+4 verbose stack Error: missing script: start
+4 verbose stack     at run (/usr/local/lib/node_modules/npm/lib/run-script.js:151:19)
+4 verbose stack     at /usr/local/lib/node_modules/npm/lib/run-script.js:61:5
+4 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:356:5
+4 verbose stack     at handleExists (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:329:20)
+4 verbose stack     at FSReqWrap.cb [as oncomplete] (fs.js:257:19)
+5 verbose cwd /Users/acastano/Sites/Projects/CardiacSensor
+6 error Darwin 15.6.0
+7 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+8 error node v6.4.0
+9 error npm  v3.10.7
+10 error missing script: start
+11 error If you need help, you may report this error at:
+11 error     <https://github.com/npm/npm/issues>
+12 verbose exit [ 1, true ]
