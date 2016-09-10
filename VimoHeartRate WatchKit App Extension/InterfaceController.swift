@@ -140,6 +140,13 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate {
         dispatch_async(dispatch_get_main_queue()) {
             guard let sample = heartRateSamples.first else{return}
             let value = sample.quantity.doubleValueForUnit(self.heartRateUnit)
+            
+            if value == 0 {
+                //TODO send notification to Nexmo, get geolocation data etc.
+                
+            }
+            
+            
             self.label.setText(String(UInt16(value)))
             
             // retrieve source from sample
