@@ -2,9 +2,20 @@ var express = require('express');
 var router = express.Router();
 var https = require('https');
 var User = require('../models/User');
+var GoogleMapsAPI = require('googlemaps');
 /*
 create a request and send a text message
 */
+
+var googleMapsConfig = {
+	key: 'AIzaSyC-betFNmrdFDconv34hLHo_cfVqFoEZ8Y',
+	stagger_time: 1000,
+	encode_polylines: false,
+	secure: true
+}
+var gmAPI = new GoogleMapsAPI(googleMapsConfig);
+
+
 function createData(to, from, text) {
 	return JSON.stringify({
 		api_key: '4c5cc473',
@@ -37,15 +48,23 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/message', function(req, res, next) {
-	sendMessage(req, res, '/sms/json', 'rest.nexmo.com');
+	convertToAddress("39.953488", "-75.195422")
+	.then(sendMessage.bind(this, req, res, '/sms/json', 'rest.nexmo.com'))
+	.catch(function(err) {
+		res.send(err);
+	});
 });
 
 router.get('/call', function(req, res, next) {
-	sendMessage(req, res, '/tts/json', 'api.nexmo.com');
+	convertToAddress("39.953488", "-75.195422")
+	.then(sendMessage.bind(this, req, res, '/tts/json', 'api.nexmo.com'))
+	.catch(function(err) {
+		res.send(err);
+	});
 });
 
-function sendMessage(req, res, path, host) {
-	var data = createData('14406688277', '12404287093', 'This is an emergency, I am dying');
+function sendMessage(req, res, path, host, address) {
+	var data = createData('14406688277', '12404287093', 'This is an emergency, I am dying. My current location is ' + address);
 	var options = createOptions(path, host, data);
 
 	var nexmoReq = https.request(options);
@@ -78,6 +97,19 @@ function sendMessage(req, res, path, host) {
 					res.send('Error sending call');
 				}
 			}
+		});
+	});
+}
+
+var convertToAddress = function(lat, long) {
+	var geocodeParams = {
+		"latlng": lat + ", " + long,
+	  	"result_type": "street_address",
+	  	"language": "en"
+	};
+	return new Promise(function(resolve, reject) {
+		gmAPI.reverseGeocode(geocodeParams, function(err, result) {
+			resolve(result.results[0].formatted_address);
 		});
 	});
 }
