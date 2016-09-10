@@ -1,20 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var https = require('https');
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
 /*
 create a request and send a text message
 */
 var data = JSON.stringify({
  api_key: '4c5cc473',
  api_secret: '701785bd2c966392',
- to: '4406688277',
- from: '5613793611',
+ to: '14406688277',
+ from: '15613793611',
  text: 'Hello from Alid'
 });
 
@@ -29,37 +23,37 @@ var options = {
  }
 };
 
-var req = https.request(options);
-
-req.write(data);
-req.end();
-
-var responseData = '';
-req.on('response', function(res){
- res.on('data', function(chunk){
-   responseData += chunk;
- });
-
- res.on('end', function(){
-   console.log(JSON.parse(responseData));
- });
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
 });
 
-/*
-check response codes
-Decode the json object you retrieved when you ran the request.
-*/
-var decodedResponse = JSON.parse(responseData);
+router.get('/message', function(req, res, next) {
+	var nexmoReq = https.request(options);
+	nexmoReq.write(data);
+	nexmoReq.end();
 
-console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
+	var responseData = '';
+	nexmoReq.on('response', function(nexmoRes) {
+		nexmoRes.on('data', function(chunk) {
+			responseData += chunk;
+		});		
 
-decodedResponse['messages'].forEach(function(message) {
-    if (message['status'] === "0") {
-      console.log('Success ' + decodedResponse['message-id']);
-    }
-    else {
-      console.log('Error ' + decodedResponse['status']  + ' ' +  decodedResponse['error-text']);
-    }
+		nexmoRes.on('end', function() {
+			console.log(responseData);
+			var decodedResponse = JSON.parse(responseData);
+
+			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
+			decodedResponse['messages'].forEach(function(message) {
+	    		if (message['status'] === "0") {
+	      			console.log('Success ' + decodedResponse['message-id']);
+	    		}
+	    		else {
+	      			console.log('Error ' + decodedResponse['status']  + ' ' +  decodedResponse['error-text']);
+	    		}
+			});
+		});
+	});
 });
 
 module.exports = router;
