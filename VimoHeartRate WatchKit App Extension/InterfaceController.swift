@@ -9,9 +9,10 @@
 import Foundation
 import HealthKit
 import WatchKit
+import CoreLocation
 
 
-class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate {
+class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate, CLLocationManagerDelegate {
     
     @IBOutlet private weak var label: WKInterfaceLabel!
     @IBOutlet private weak var deviceLabel : WKInterfaceLabel!
@@ -28,10 +29,25 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate {
     let heartRateUnit = HKUnit(fromString: "count/min")
     var anchor = HKQueryAnchor(fromValue: Int(HKAnchoredObjectQueryNoAnchor))
     
+    let locationManager = CLLocationManager()
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
     }
+    
+    
+//    func locationManager(manager: CLLocationManager,
+//                         didFailWithError error: NSError) {
+//        print(error.description)
+//    }
+//
+//    func locationManager(manager: CLLocationManager, didUpdateLocations
+//        locations: [CLLocation]) {
+//        print("got location")
+//    }
+    
     
     override func willActivate() {
         super.willActivate()
@@ -141,9 +157,21 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate {
             guard let sample = heartRateSamples.first else{return}
             let value = sample.quantity.doubleValueForUnit(self.heartRateUnit)
             
-            if value == 0 {
-                //TODO send notification to Nexmo, get geolocation data etc.
+            
+            // if heart rate is 0, ping the server to send a Nexmo SMS to emergency contacts
+            if value == 59 {
+                //self.locationManager.requestLocation()
+                print("got location")
                 
+                
+                let url = NSURL(string: "https://cardiacsensor.herokuapp.com/message")
+                let url2 = NSURL(string: "https://cardiacsensor.herokuapp.com/call") //?lat=#&long=#
+                
+                let task = NSURLSession.sharedSession().dataTaskWithURL(url!)
+                let task2 = NSURLSession.sharedSession().dataTaskWithURL(url2!)
+                self.label.setText("HTTP")
+                task.resume()
+                task2.resume()
             }
             
             

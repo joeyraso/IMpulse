@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var exphbs = require('express-handlebars'); // handlebars templates
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
 
@@ -27,7 +28,9 @@ mongoose.connection.on('error', function(e) {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// set handlebars as template engine
+app.engine('.hbs', exphbs({defaultLayout: 'default', extname: '.hbs'}));
+app.set('view engine', '.hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
