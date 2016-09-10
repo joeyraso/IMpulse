@@ -34,38 +34,16 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/message', function(req, res, next) {
-	var data = createData('14406688277', '12404287093', 'Hello from Alid');
-	var options = createOptions('/sms/json', 'rest.nexmo.com', data);
-
-	var nexmoReq = https.request(options);
-	nexmoReq.write(data);
-	nexmoReq.end();
-
-	var responseData = '';
-	nexmoReq.on('response', function(nexmoRes) {
-		nexmoRes.on('data', function(chunk) {
-			responseData += chunk;
-		});
-
-		nexmoRes.on('end', function() {
-			var decodedResponse = JSON.parse(responseData);
-
-			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
-			decodedResponse['messages'].forEach(function(message) {
-	    		if (message['status'] === "0") {
-	      			res.send('Success ' + message['message-id']);
-	    		}
-	    		else {
-	      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
-	    		}
-			});
-		});
-	});
+	sendMessage(req, res, '/sms/json', 'rest.nexmo.com');
 });
 
 router.get('/call', function(req, res, next) {
-	var data = createData('14406688277', '12404287093', 'This is an emergency, I am dying');
-	var options = createOptions('/tts/json', 'api.nexmo.com', data);
+	sendMessage(req, res, '/tts/json', 'api.nexmo.com');
+});
+
+function sendMessage(req, res, path, host) {
+	var data = createData('19136386677', '12404287093', 'This is an emergency, I am dying');
+	var options = createOptions(path, host, data);
 
 	var nexmoReq = https.request(options);
 	nexmoReq.write(data);
@@ -78,21 +56,28 @@ router.get('/call', function(req, res, next) {
 		});
 
 		nexmoRes.on('end', function() {
-			console.log(responseData);
 			var decodedResponse = JSON.parse(responseData);
 
-			console.log('You sent ' + decodedResponse['message-count'] + ' messages.\n');
-			decodedResponse['messages'].forEach(function(message) {
-	    		if (message['status'] === "0") {
-	      			res.send('Success ' + message['message-id']);
-	    		}
-	    		else {
-	      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
-	    		}
-			});
+			if (decodedResponse['messages']) {
+				decodedResponse['messages'].forEach(function(message) {
+		    		if (message['status'] === "0") {
+		      			res.send('Success ' + message['message-id']);
+		    		}
+		    		else {
+		      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
+		    		}
+				});
+			} else {
+				if (decodedResponse['error_text'] === 'Success') {
+					res.send('Successfully sent call');
+				}
+				else {
+					res.send('Error sending call');
+				}
+			}
 		});
 	});
-});
+}
 
 router.get('/addUser', function(req, res, next) {
 	var user = new User();
