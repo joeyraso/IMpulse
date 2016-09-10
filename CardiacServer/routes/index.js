@@ -25,7 +25,7 @@ var options = {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Cardiac Sensor' });
 });
 
 router.get('/message', function(req, res, next) {
@@ -37,7 +37,7 @@ router.get('/message', function(req, res, next) {
 	nexmoReq.on('response', function(nexmoRes) {
 		nexmoRes.on('data', function(chunk) {
 			responseData += chunk;
-		});		
+		});
 
 		nexmoRes.on('end', function() {
 			var decodedResponse = JSON.parse(responseData);
