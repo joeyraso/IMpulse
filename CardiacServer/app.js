@@ -15,7 +15,7 @@ var app = express();
 
 var MONGODB_URI;
 if (app.get('env') === 'development') {
-  MONGODB_URI = "mongodb://localhost:27017/local";
+  MONGODB_URI = "mongodb://arresteddevelopment:saveme@ds029436.mlab.com:29436/heroku_b9m24fb8";
 } else {
   MONGODB_URI = process.env.MONGODB_URI
 }
