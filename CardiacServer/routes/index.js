@@ -41,7 +41,10 @@ function createOptions(path, host, data) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Cardiac Sensor' });
+  res.render('index', {
+    title: 'Cardiac Sensor',
+    slogan: 'Saving lives, one text at a time'
+  });
 });
 
 router.get('/message', function(req, res, next) {

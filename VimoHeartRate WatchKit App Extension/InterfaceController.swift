@@ -29,24 +29,32 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate, CLLo
     let heartRateUnit = HKUnit(fromString: "count/min")
     var anchor = HKQueryAnchor(fromValue: Int(HKAnchoredObjectQueryNoAnchor))
     
-    let locationManager = CLLocationManager()
+    //Location data
+    var locationManager: CLLocationManager = CLLocationManager()
+    var mapLocation: CLLocationCoordinate2D?
     
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
-        locationManager.delegate = self
+        
         locationManager.requestAlwaysAuthorization()
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.requestLocation()
     }
     
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let currentLocation = locations[0]
+        let lat = currentLocation.coordinate.latitude
+        let long = currentLocation.coordinate.longitude
+        
+        self.mapLocation = CLLocationCoordinate2DMake(lat, long)
+    }
     
-//    func locationManager(manager: CLLocationManager,
-//                         didFailWithError error: NSError) {
-//        print(error.description)
-//    }
-//
-//    func locationManager(manager: CLLocationManager, didUpdateLocations
-//        locations: [CLLocation]) {
-//        print("got location")
-//    }
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        
+        print(error.description)
+    }
     
     
     override func willActivate() {
@@ -159,19 +167,15 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate, CLLo
             
             
             // if heart rate is 0, ping the server to send a Nexmo SMS to emergency contacts
-            if value == 59 {
-                //self.locationManager.requestLocation()
-                print("got location")
+            if value == 0 {
+                let urlMsg = NSURL(string: "https://cardiacsensor.herokuapp.com/message?")
+                let urlCall = NSURL(string: "https://cardiacsensor.herokuapp.com/call?") //?lat=#&long=#
                 
-                
-                let url = NSURL(string: "https://cardiacsensor.herokuapp.com/message")
-                let url2 = NSURL(string: "https://cardiacsensor.herokuapp.com/call") //?lat=#&long=#
-                
-                let task = NSURLSession.sharedSession().dataTaskWithURL(url!)
-                let task2 = NSURLSession.sharedSession().dataTaskWithURL(url2!)
+                let taskMsg = NSURLSession.sharedSession().dataTaskWithURL(urlMsg!)
+                let taskCall = NSURLSession.sharedSession().dataTaskWithURL(urlCall!)
                 self.label.setText("HTTP")
-                task.resume()
-                task2.resume()
+                taskMsg.resume()
+                taskCall.resume()
             }
             
             
@@ -183,6 +187,8 @@ class InterfaceController: WKInterfaceController, HKWorkoutSessionDelegate, CLLo
             self.animateHeart()
         }
     }
+    
+    
     
     func updateDeviceName(deviceName: String) {
         deviceLabel.setText(deviceName)
