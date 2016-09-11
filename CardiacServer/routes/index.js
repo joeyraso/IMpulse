@@ -109,7 +109,12 @@ var convertToAddress = function(lat, long) {
 	};
 	return new Promise(function(resolve, reject) {
 		gmAPI.reverseGeocode(geocodeParams, function(err, result) {
-			resolve(result.results[0].formatted_address);
+			if (result.results[0] && result.results[0].formatted_address) {
+				resolve(result.results[0].formatted_address);
+			}
+			else {
+				resolve('Location Unknown');
+			}
 		});
 	});
 }
