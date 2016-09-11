@@ -45,7 +45,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/message', function(req, res, next) {
-	convertToAddress("39.953488", "-75.195422")
+	convertToAddress(req.query.lat, req.query.long)
 	.then(sendMessage.bind(this, req, res, '/sms/json', 'rest.nexmo.com'))
 	.catch(function(err) {
 		res.send(err);
@@ -53,7 +53,7 @@ router.get('/message', function(req, res, next) {
 });
 
 router.get('/call', function(req, res, next) {
-	convertToAddress("39.953488", "-75.195422")
+	convertToAddress(req.query.lat, req.query.long)
 	.then(sendMessage.bind(this, req, res, '/tts/json', 'api.nexmo.com'))
 	.catch(function(err) {
 		res.send(err);
