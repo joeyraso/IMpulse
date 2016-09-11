@@ -7,6 +7,9 @@ var GoogleMapsAPI = require('googlemaps');
 create a request and send a text message
 */
 
+var tooSoonMessage = false;
+var tooSoonCall = false;
+
 var googleMapsConfig = {
 	key: 'AIzaSyC-betFNmrdFDconv34hLHo_cfVqFoEZ8Y',
 	stagger_time: 1000,
@@ -42,12 +45,19 @@ function createOptions(path, host, data) {
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', {
-    title: 'Cardiac Sensor',
+    title: 'IMpulse',
     slogan: 'Saving lives, one text at a time'
   });
 });
 
 router.get('/message', function(req, res, next) {
+	if (tooSoonMessage) {return res.send('Messages have already been sent. Try again later');}
+
+	tooSoonMessage = true
+	setTimeout(function() {
+		tooSoonMessage = false;
+	}, 60*10*1000);
+
 	convertToAddress(req.query.lat, req.query.long)
 	.then(sendMessage.bind(this, req, res, '/sms/json', 'rest.nexmo.com'))
 	.catch(function(err) {
@@ -56,6 +66,13 @@ router.get('/message', function(req, res, next) {
 });
 
 router.get('/call', function(req, res, next) {
+	if (tooSoonCall) {return res.send('Call has already been sent. Try again later');}
+
+	tooSoonCall = true
+	setTimeout(function() {
+		tooSoonCall = false;
+	}, 60*10*1000);
+
 	convertToAddress(req.query.lat, req.query.long)
 	.then(sendMessage.bind(this, req, res, '/tts/json', 'api.nexmo.com'))
 	.catch(function(err) {
@@ -64,7 +81,7 @@ router.get('/call', function(req, res, next) {
 });
 
 function sendMessage(req, res, path, host, address) {
-	var data = createData('14406688277', '12404287093', 'This is an emergency, I am dying. My current location is ' + address);
+	var data = createData('14406688277', '12404287093', 'This is an emergency! I am currently suffering from a cardiac arrest and am in need of immediate assistance. My current location is ' + address);
 	var options = createOptions(path, host, data);
 
 	var nexmoReq = https.request(options);
@@ -79,16 +96,18 @@ function sendMessage(req, res, path, host, address) {
 
 		nexmoRes.on('end', function() {
 			var decodedResponse = JSON.parse(responseData);
-
+			var responseStr = '';
 			if (decodedResponse['messages']) {
 				decodedResponse['messages'].forEach(function(message) {
 		    		if (message['status'] === "0") {
-		      			res.send('Success ' + message['message-id']);
+		    			responseStr += 'Success ' + message['message-id'] + '\n';
 		    		}
 		    		else {
-		      			res.send('Error ' + message['status']  + ' ' +  message['error-text']);
+		    			responseStr += 'Error ' + message['status']  + ' ' +  message['error-text'] + '\n';
 		    		}
 				});
+
+				res.send(responseStr);
 			} else {
 				if (decodedResponse['error_text'] === 'Success') {
 					res.send('Successfully sent call');

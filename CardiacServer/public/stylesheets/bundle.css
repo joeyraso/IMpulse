@@ -478,6 +478,17 @@ a {
   color: #ccc;
   padding-left: .5rem; }
 
+html {
+  height: 100%; }
+
+body {
+  height: 100%;
+  display: flex; }
+
+#page {
+  margin: auto;
+  text-align: center; }
+
 .hero {
   z-index: -1;
   background-size: cover;
