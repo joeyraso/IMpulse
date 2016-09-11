@@ -11,7 +11,7 @@ var tooSoonMessage = false;
 var tooSoonCall = false;
 
 var googleMapsConfig = {
-	key: 'AIzaSyC-betFNmrdFDconv34hLHo_cfVqFoEZ8Y',
+	key: '',
 	stagger_time: 1000,
 	encode_polylines: false,
 	secure: true
@@ -21,8 +21,8 @@ var gmAPI = new GoogleMapsAPI(googleMapsConfig);
 
 function createData(to, from, text) {
 	return JSON.stringify({
-		api_key: '4c5cc473',
- 		api_secret: '701785bd2c966392',
+		api_key: '',
+ 		api_secret: '',
  		to: to,
  		from: from,
  		text: text
